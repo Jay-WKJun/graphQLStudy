@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
 import {
   useQuery,
   gql,
 } from '@apollo/client';
 import styled from 'styled-components';
+import Anime from '../components/Anime';
 
 const Header = styled.div`
   display: flex;
@@ -58,23 +58,6 @@ const Animations = styled.div`
   margin-top: -50px;
 `;
 
-const Animation = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 150px;
-  height: 250px;
-  margin: 0 10px;
-`;
-
-const Poster = styled.img`
-
-`;
-
-const LikeButton = styled.button`
-  width: 50px;
-  height: 30px;
-`;
-
 const QUERY = gql`
 {
   Page(page: 0, perPage: 20) {
@@ -82,6 +65,7 @@ const QUERY = gql`
       id
       media {
         id
+        isLiked @client
         title {
           romaji
           english
@@ -106,7 +90,6 @@ const QUERY = gql`
 `;
 
 function Home() {
-  const navigator = useNavigate();
   const { loading, data } = useQuery(QUERY);
   console.log(data, loading);
 
@@ -127,10 +110,7 @@ function Home() {
           { loading && <Loading>loading...</Loading> }
           {
             data?.Page?.mediaList.map(media => (
-              <Animation key={media.id} onClick={() => navigator(`/${media.media.id}`)}>
-                <Poster src={media.media.coverImage.extraLarge} />
-                <LikeButton>Like</LikeButton>
-              </Animation>
+              <Anime media={media} key={media.id} />
             ))
           }
         </Animations>
