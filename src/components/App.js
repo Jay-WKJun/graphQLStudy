@@ -1,9 +1,20 @@
+import {
+  Routes,
+  Route,
+} from 'react-router';
+import { HashRouter as Router } from 'react-router-dom'
+
+import Home from '../routes/Home';
+import Detail from '../routes/Detail.js';
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path=":id" element={<Detail />} />
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </Router>
   );
 }
 
